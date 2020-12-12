@@ -46,6 +46,8 @@
 (defn walk [board my-color paths]
   (map (partial walk* board my-color) paths))
 
-(let [board {[1 7] (Rook. :black)
-             [1 5] (Pawn. :black)}]
-  (walk board :black (piece/paths (Rook. :black) [1 7])))
+(comment
+  (let [board {[1 7] (Rook. :black)
+               [1 5] (Pawn. :black)}]
+    (walk board :black (piece/paths (Rook. :black) [1 7])))
+)

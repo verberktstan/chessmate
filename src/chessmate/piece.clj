@@ -1,24 +1,5 @@
-(ns chessmate.piece)
-
-(def RANGE (map inc (range)))
-
-(def NORTHWARD
-  (map #(vector 0 (* % -1)) RANGE))
-(def EASTWARD
-  (map #(vector % 0) RANGE))
-(def SOUTHWARD
-  (map #(vector 0 %) RANGE))
-(def WESTWARD
-  (map #(vector (* % -1) 0) RANGE))
-
-(def NORTHEASTWARD
-  (map (partial mapv +) NORTHWARD EASTWARD))
-(def SOUTHEASTWARD
-  (map (partial mapv +) SOUTHWARD EASTWARD))
-(def SOUTHWESTWARD
-  (map (partial mapv +) SOUTHWARD WESTWARD))
-(def NORTHWESTWARD
-  (map (partial mapv +) NORTHWARD WESTWARD))
+(ns chessmate.piece
+  (:require [chessmate.path :as path]))
 
 (defn on-board? [[x y]]
   (and (< 0 x 9) (< 0 y 9)))
@@ -36,7 +17,7 @@
   (paths [piece pos]))
 
 (defrecord Pawn [color]
-    Piece
+  Piece
   (paths [pawn pos]
     (let [paths (if (#{:black} color)
                   [(list [0 1])]
@@ -48,7 +29,7 @@
   (paths [rook pos]
     (keep
      (partial translate-on-board pos)
-     [NORTHWARD EASTWARD SOUTHWARD WESTWARD])))
+     [path/NORTHWARD path/EASTWARD path/SOUTHWARD path/WESTWARD])))
 
 (defrecord Knight [color]
   Piece
@@ -69,17 +50,17 @@
   (paths [bishop pos]
     (keep
      (partial translate-on-board pos)
-     [NORTHEASTWARD SOUTHEASTWARD SOUTHWESTWARD NORTHWESTWARD])))
+     [path/NORTHEASTWARD path/SOUTHEASTWARD path/SOUTHWESTWARD path/NORTHWESTWARD])))
 
 (defrecord Queen [color]
   Piece
   (paths [queen pos]
     (keep
      (partial translate-on-board pos)
-     [NORTHWARD NORTHEASTWARD
-      EASTWARD  SOUTHEASTWARD
-      SOUTHWARD SOUTHWESTWARD
-      WESTWARD  NORTHWESTWARD])))
+     [path/NORTHWARD path/NORTHEASTWARD
+      path/EASTWARD  path/SOUTHEASTWARD
+      path/SOUTHWARD path/SOUTHWESTWARD
+      path/WESTWARD  path/NORTHWESTWARD])))
 
 (defrecord King [color]
   Piece
