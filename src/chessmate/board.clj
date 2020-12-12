@@ -3,7 +3,7 @@
             [chessmate.pos :as pos])
   (:import [chessmate.piece Pawn Rook Knight Bishop Queen King]))
 
-(defn make []
+(defn- make* []
   {(pos/make 1 7) (Pawn. :white)
    (pos/make 2 7) (Pawn. :white)
    (pos/make 3 7) (Pawn. :white)
@@ -38,11 +38,42 @@
    (pos/make 7 1) (Knight. :black)
    (pos/make 8 1) (Rook.   :black)})
 
-(defn- walk* [board my-color path]
+(defn make []
+  (let [board (make*)]
+    (assoc board :non-moved (-> board keys set))))
+
+#_(defn- walk* [board my-color path]
   (let [[move [attack]] (split-with (partial (complement contains?) board) path)
         {:keys [color]} (get board attack)]
     (cond-> move
       (and color (not= color my-color)) (concat [attack]))))
 
-(defn walk [board my-color paths]
-  (into #{} (mapcat (partial walk* board my-color) paths)))
+(defn- walk-positions [board path]
+  (take-while (partial (complement contains?) board) path))
+
+(defn- walk-attack [board my-color path]
+  (let [[_ [attack]] (split-with (partial (complement contains?) board) path)
+        {:keys [color]} (get board attack)]
+    (when (and attack (not= color my-color))
+      attack)))
+
+(defn walk [board my-color move-paths attack-paths]
+  (let [positions (mapcat (partial walk-positions board) move-paths)
+        attacks (keep (partial walk-attack board my-color) attack-paths)]
+    (into #{} (concat positions attacks))))
+
+(defn move
+  "Move a piece from 'from' to 'to'."
+  [board from to]
+  (let [{:keys [color] :as piece} (get board from)
+        possible-positions (walk board color (piece/paths piece from) (piece/attacks piece from))]
+    (if (contains? possible-positions to)
+      (-> (dissoc board from)
+          (assoc to piece)
+          (update :non-moved disj from))
+      (throw (ex-info "Cannot move there" {})))))
+
+(comment
+  (let [board (make)]
+    (move board (pos/make 6 7) (pos/make 6 6)))
+)

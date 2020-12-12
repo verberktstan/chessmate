@@ -7,9 +7,11 @@
 (deftest pawn-test
   (let [w (Pawn. :white)
         b (Pawn. :black)]
-    (is (= [(list (pos/make 1 6) (pos/make 1 5))] (sut/paths w (pos/make 1 7))))
-    (is (= [(list (pos/make 1 5))] (sut/paths w (pos/make 1 6))))
-    (is (= [(list (pos/make 1 3))] (sut/paths b (pos/make 1 2))))))
+    (is (= [(list (pos/make 1 5) (pos/make 1 4))] (sut/paths w (pos/make 1 6))))
+    (is (= [(list (pos/make 1 3) (pos/make 1 4))] (sut/paths b (pos/make 1 2))))
+    (is (= [(list (pos/make 1 5)) (list (pos/make 3 5))]
+           (sut/attacks w (pos/make 2 6))))
+    (is (= [(list (pos/make 2 7))] (sut/attacks b (pos/make 1 6))))))
 
 (deftest rook-test
   (let [piece (Rook. :white)]

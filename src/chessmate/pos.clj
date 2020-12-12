@@ -7,8 +7,12 @@
    `(make 1 2) => [1 2]`"
   vector)
 
-(def NORTH (make 0 -1))
-(def SOUTH (make 0  1))
+(def NORTH     (make  0 -1))
+(def NORTHEAST (make  1 -1))
+(def SOUTHEAST (make  1  1))
+(def SOUTH     (make  0  1))
+(def SOUTHWEST (make -1  1))
+(def NORTHWEST (make -1 -1))
 
 (def x "Returns the x value of the pos" first)
 (def y "Returns the y value of the pos" second)
