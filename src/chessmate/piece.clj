@@ -9,8 +9,8 @@
   Piece
   (paths [pawn pos]
     (let [paths (if (#{:black} color)
-                  [(list [0 1])]
-                  [(list [0 -1])])]
+                  [(list (pos/make 0 1))]
+                  [(list (pos/make 0 -1))])]
       (keep (partial path/translate-on-board pos) paths))))
 
 (defrecord Rook [color]
@@ -25,14 +25,14 @@
   (paths [knight pos]
     (keep
      (partial path/translate-on-board pos)
-     [(list [1 -2])
-      (list [2 -1])
-      (list [2  1])
-      (list [1  2])
-      (list [-1 2])
-      (list [-2 1])
-      (list [-2 -1])
-      (list [-1 -2])])))
+     [(list (pos/make 1 -2))
+      (list (pos/make 2 -1))
+      (list (pos/make 2  1))
+      (list (pos/make 1  2))
+      (list (pos/make -1 2))
+      (list (pos/make -2 1))
+      (list (pos/make -2 -1))
+      (list (pos/make -1 -2))])))
 
 (defrecord Bishop [color]
   Piece
@@ -56,11 +56,11 @@
   (paths [king pos]
     (keep
      (partial path/translate-on-board pos)
-     [(list [ 0 -1])
-      (list [ 1 -1])
-      (list [ 1  0])
-      (list [ 1  1])
-      (list [ 0  1])
-      (list [-1  1])
-      (list [-1  0])
-      (list [-1 -1])])))
+     [(list (pos/make  0 -1))
+      (list (pos/make  1 -1))
+      (list (pos/make  1  0))
+      (list (pos/make  1  1))
+      (list (pos/make  0  1))
+      (list (pos/make -1  1))
+      (list (pos/make -1  0))
+      (list (pos/make -1 -1))])))
