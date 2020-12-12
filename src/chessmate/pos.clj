@@ -7,6 +7,9 @@
    `(make 1 2) => [1 2]`"
   vector)
 
+(def NORTH (make 0 -1))
+(def SOUTH (make 0  1))
+
 (def x "Returns the x value of the pos" first)
 (def y "Returns the y value of the pos" second)
 
@@ -19,3 +22,6 @@
   "Returns a pos vector. Sums the x's and y's of all given pos arguments,
    thus 'moving' the pos."
   (partial mapv +))
+
+(defn flip-vertical [pos]
+  (make (x pos) (* (y pos) -1)))

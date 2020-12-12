@@ -32,3 +32,6 @@
   (map (partial pos/translate pos) path))
 
 (def translate-on-board (comp seq take-on-board translate))
+
+(defn flip-vertical [path]
+  (map pos/flip-vertical path))

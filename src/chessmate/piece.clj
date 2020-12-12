@@ -3,14 +3,14 @@
             [chessmate.pos :as pos]))
 
 (defprotocol Piece
+  "Every Piece should implement paths, a fn that returns the paths (list of possible positions) that a piece can traverse."
   (paths [piece pos]))
 
 (defrecord Pawn [color]
   Piece
   (paths [pawn pos]
-    (let [paths (if (#{:black} color)
-                  [(list (pos/make 0 1))]
-                  [(list (pos/make 0 -1))])]
+    (let [paths (cond-> [(list pos/NORTH)]
+                  (#{:black} color) path/flip-vertical)]
       (keep (partial path/translate-on-board pos) paths))))
 
 (defrecord Rook [color]
