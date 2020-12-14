@@ -29,6 +29,7 @@
 (defrecord Rook [color]
   Piece
   (paths [_ pos _]
+    ;; TODO; implement castle(rokade) for king and rook..
     (keep
      (partial path/translate-on-board pos)
      [path/NORTHWARD path/EASTWARD path/SOUTHWARD path/WESTWARD]))
@@ -75,6 +76,7 @@
 (defrecord King [color]
   Piece
   (paths [_ pos _]
+    ;; TODO; implement castle(rokade) for king and rook..
     (keep
      (partial path/translate-on-board pos)
      [(list (pos/make  0 -1))
