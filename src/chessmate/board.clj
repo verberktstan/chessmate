@@ -3,7 +3,7 @@
             [chessmate.pos :as pos])
   (:import [chessmate.piece Pawn Rook Knight Bishop Queen King]))
 
-(defn- make* []
+(def ^:private INITIAL_BOARD
   {(pos/make 1 7) (Pawn. :white)
    (pos/make 2 7) (Pawn. :white)
    (pos/make 3 7) (Pawn. :white)
@@ -39,8 +39,7 @@
    (pos/make 8 1) (Rook.   :black)})
 
 (defn make []
-  (let [board (make*)]
-    (assoc board :non-moved (-> board keys set))))
+  (assoc INITIAL_BOARD :non-moved (-> INITIAL_BOARD keys set)))
 
 #_(defn- walk* [board my-color path]
   (let [[move [attack]] (split-with (partial (complement contains?) board) path)
@@ -64,9 +63,10 @@
 
 (defn move
   "Move a piece from 'from' to 'to'."
-  [board from to]
+  [{:keys [non-moved] :as board} from to]
   (let [{:keys [color] :as piece} (get board from)
-        possible-positions (walk board color (piece/paths piece from) (piece/attacks piece from))]
+        first-move? (contains? non-moved from)
+        possible-positions (walk board color (piece/paths piece from first-move?) (piece/attacks piece from))]
     (if (contains? possible-positions to)
       (-> (dissoc board from)
           (assoc to piece)
@@ -75,5 +75,5 @@
 
 (comment
   (let [board (make)]
-    (move board (pos/make 6 7) (pos/make 6 6)))
+    (move board (pos/make 6 7) (pos/make 6 5)))
 )
